@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_03_211810) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_03_221453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,6 +66,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_03_211810) do
     t.string "location"
     t.string "image_url"
     t.float "price"
+    t.text "description"
+    t.string "condition"
     t.index ["user_id"], name: "index_surfboards_on_user_id"
   end
 

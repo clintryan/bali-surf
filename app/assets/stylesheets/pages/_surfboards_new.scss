@@ -1,77 +1,235 @@
-// app/assets/stylesheets/pages/_surfboards_new.scss
+// Import your config files if not already imported in application.scss,
+// ensuring _colors and _fonts are available
+// @import "config/colors";
+// @import "config/fonts";
+// @import "config/bootstrap_variables"; // If you're putting your variables here
 
 .new-surfboard-title {
-  font-family: $headers-font; // Using your global header font
-  color: $primary-colour;    // Using your primary color
-  font-size: 3rem;           // Adjust as needed, perhaps map to H1 font size
-  margin-bottom: 2rem;
+  font-family: $headers-font;
+  color: $primary-colour;
+  font-size: 3.5rem; // Slightly larger for impact
+  font-weight: 700; // Make it bolder
+  margin-bottom: 3rem; // More space below title
   text-align: center;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.1); // Subtle text shadow
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.15); // More prominent shadow
+  letter-spacing: -0.05em; // Slightly tighter letter spacing for modern look
 }
 
 .new-surfboard-form-container {
-  background-color: white; // Or your $background-colour if you prefer
-  border-radius: $border-radius-xl; // Use a larger border radius for the whole container
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1); // Modern, soft shadow
-  padding: 2.5rem; // More padding inside the container
-  display: flex; // Use flexbox for the row for more control if needed
+  background-color: white; // Solid white for a clean base
+  border-radius: $border-radius-xxl; // More pronounced rounding
+  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.15); // Deeper, softer shadow for floating effect
+  padding: 3rem 4rem; // More generous padding inside the container
+  display: flex;
   flex-wrap: wrap; // Allows columns to wrap on smaller screens
+  align-items: flex-start; // Align columns at the top
 
-  .col-md-6 {
-    // Add some space between the two columns on larger screens
+  // General styling for Simple Form field wrappers
+  .mb-3 { // Simple Form typically adds mb-3 to form-group
+    margin-bottom: 1.5rem !important; // More space between fields
+  }
+
+  .form-label { // Style for labels (e.g., "Category", "Size")
+    font-family: $body-font;
+    font-weight: 600; // Slightly bolder labels
+    color: $body-font-colour;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    display: block; // Ensure labels are blocks for proper spacing
+  }
+
+  // Column specific adjustments
+  .col-lg-6 {
+    // These specific overrides are useful if you need finer control than Bootstrap's default gutter
+    // The p-4 class already gives 1.5rem padding, so these adjust beyond that
     &:first-child {
-      padding-right: 2rem; // Space between form and image on desktop
+      padding-right: 3rem !important; // More space between form and image on desktop
     }
     &:last-child {
-      padding-left: 2rem; // Space between form and image on desktop
+      padding-left: 3rem !important; // More space between form and image on desktop
     }
-    @media (max-width: 767px) { // Adjust for mobile
+    @media (max-width: 991px) { // Adjust for tablets/small laptops
+      padding-right: 1.5rem !important;
+      padding-left: 1.5rem !important;
+    }
+    @media (max-width: 767px) { // Adjust for mobile (columns stack)
       padding-right: 1rem !important;
       padding-left: 1rem !important;
-      margin-bottom: 1.5rem; // Add space between columns on mobile
+      margin-bottom: 2rem; // Space between stacked columns
     }
   }
 }
 
 .rounded-input {
-  border-radius: $border-radius-lg !important; // Apply your larger border radius to inputs
-  border: 1px solid $gray-shade-colour; // Soft border
-  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.05); // Subtle inner shadow for depth
-  padding: 0.75rem 1rem; // Adjust padding for a cleaner look
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; // Smooth transition on focus
+  border-radius: $border-radius-lg !important; // Consistent rounding
+  border: 1px solid $gray-shade-colour; // Soft, subtle border
+  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.03); // Very subtle inner shadow for depth
+  padding: 0.65rem 1rem; // Slightly more generous padding inside inputs
+  font-size: 0.95rem; // Slightly larger text in inputs
+  color: $body-font-colour;
+  background-color: #fcfcfc; // Very light off-white background
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; // Smooth transitions
+
+  // Style for dropdowns (select tags)
+  select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 0.85rem 0.85rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 2.25rem; // Make space for the custom arrow
+  }
 
   &:focus {
-    border-color: $primary-colour; // Highlight on focus
-    box-shadow: 0 0 0 0.2rem rgba($primary-colour, 0.25); // Subtle focus glow
+    border-color: $primary-colour;
+    box-shadow: 0 0 0 0.2rem rgba($primary-colour, 0.2); // Softer focus glow
+    background-color: white; // White background on focus
+    outline: none; // Remove default outline
   }
+
+  &::placeholder { // For placeholder text
+    color: lighten($body-font-colour, 40%);
+    font-style: italic;
+  }
+}
+
+.image-upload-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem; // Add some space above the placeholder if needed
 }
 
 .image-placeholder {
   width: 100%;
-  max-width: 400px; // Max width for the placeholder
-  height: 250px; // Fixed height for consistency
-  background-color: $light-gray; // Light background for placeholder
-  border: 2px dashed $gray-shade-colour; // Dashed border
-  border-radius: $border-radius-xl; // Rounded corners for the placeholder
-  display: flex; // Already handled by Bootstrap, but good to be explicit
+  max-width: 450px; // Slightly wider max width for placeholder
+  height: 280px; // Slightly taller fixed height
+  background-color: $light-gray;
+  border: 2px dashed $gray-shade-colour;
+  border-radius: $border-radius-xl;
+  display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; // Hide anything that goes outside
-  color: $body-font-colour; // Color for the camera icon if used
-}
-
-// Styling for the "Add Image" button (using Bootstrap's .btn-secondary)
-.btn-secondary {
-  background-color: $secondary-colour; // Use your secondary color
-  border-color: $secondary-colour;
-  color: white;
-  border-radius: $border-radius; // Use your button border-radius
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  color: $body-font-colour;
+  transition: background-color 0.3s ease, border-color 0.3s ease; // Smooth transitions
 
   &:hover {
-    background-color: darken($secondary-colour, 10%); // Darken on hover
-    border-color: darken($secondary-colour, 10%);
+    background-color: darken($light-gray, 3%);
+    border-color: $primary-colour; // Highlight border on hover
+    cursor: pointer;
+  }
+
+  i.fa-camera {
+    font-size: 4rem; // Larger camera icon
+    color: lighten($body-font-colour, 60%); // Lighter camera icon
+  }
+
+  img#previewImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: $border-radius-xl;
+  }
+}
+
+.multi-image-thumbnail {
+  width: 90px; // Slightly smaller thumbnails for multiple images
+  height: 90px;
+  overflow: hidden;
+  border-radius: $border-radius;
+  border: 1px solid rgba($gray-shade-colour, 0.5); // Lighter border
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+#image-previews-container {
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px; // Slightly more space between thumbnails
+  padding: 0 10px; // Some internal padding
+}
+
+.btn-secondary,
+.btn-primary { // Apply common styles to both button types
+  border-radius: $border-radius-lg; // Consistent with inputs
+  padding: 0.8rem 2rem; // More padding for click target
+  font-weight: 700; // Bolder text
+  text-transform: uppercase; // All caps
+  letter-spacing: 0.05em; // Slightly spaced out letters
+  transition: all 0.3s ease; // Smooth hover effects
+  border: none; // Remove default button border
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08); // Subtle button shadow
+}
+
+.btn-secondary {
+  background-color: $secondary-colour;
+  color: white;
+  &:hover {
+    background-color: darken($secondary-colour, 10%);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.12); // Slightly deeper shadow on hover
+  }
+}
+
+.btn-primary {
+  background-color: $primary-colour;
+  color: white;
+  &:hover {
+    background-color: darken($primary-colour, 10%);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// Ensure error messages look good
+.is-invalid { // Bootstrap class for invalid fields
+  border-color: $danger !important;
+}
+.invalid-feedback { // Bootstrap class for error messages
+  color: $danger;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.step-title {
+  font-family: $headers-font;
+  color: $primary-colour;
+  font-size: 2rem; // Adjust size for step titles
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form-progress-bar {
+  width: 70%; // Adjust width of the progress bar itself
+  margin: 0 auto 3rem auto; // Center it with more margin below
+  .progress {
+    height: 10px; // Make the progress bar thinner
+    border-radius: 5px; // Rounded corners for progress bar
+    background-color: lighten($gray-shade-colour, 10%); // Lighter background for empty bar
+  }
+  .progress-bar {
+    background-color: $primary-colour; // Use your primary color for progress
+    transition: width 0.5s ease-in-out; // Smooth transition for progress update
+  }
+  small.text-muted {
+    color: $body-font-colour !important; // Ensure text color is readable
+    font-size: 0.9rem;
+    font-weight: 500;
   }
 }

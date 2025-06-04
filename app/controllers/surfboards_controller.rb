@@ -23,6 +23,6 @@ class SurfboardsController < ApplicationController
   private
 
   def surfboard_params
-    params.require(:surfboard).permit(:category, :size, :price, :tail, :location, :image_url)
+    params.require(:surfboard).permit(:category, :size, :price, :tail, :location, :image_url, images: [])
   end
 end

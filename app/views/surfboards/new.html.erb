@@ -1,4 +1,4 @@
-<div class="container my-5">
+<div class="container-xxl my-5">
   <div class="row">
     <div class="col-12 text-center mb-4">
       <h1 class="new-surfboard-title">Add a surfboard to be rented!</h1>
@@ -6,27 +6,121 @@
   </div>
 
   <div class="row new-surfboard-form-container">
-    <div class="col-md-6 p-4">
-      <%= simple_form_for @surfboard do |f| %>
-        <%= f.input :category, collection: Surfboard::CATEGORIES, prompt: "Select a category", input_html: { class: 'rounded-input' } %>
-        <%= f.input :size, input_html: { class: 'rounded-input' } %>
-        <%= f.input :tail, collection: Surfboard::TAIL_TYPES, prompt: "Select a tail type", input_html: { class: 'rounded-input' } %>
-        <%= f.input :location, input_html: { class: 'rounded-input' } %>
-        <%= f.input :price, input_html: { class: 'rounded-input' } %>
-        <%= f.submit "Add Surfboard", class: "btn btn-primary mt-3 w-100" %>
-      <% end %>
-    </div>
+    <div class="col-12">
+      <%= simple_form_for @surfboard, html: { data: { controller: "multi-step-form" } } do |f| %>
 
-    <div class="col-md-6 p-4 d-flex flex-column align-items-center justify-content-center">
-      <div class="image-placeholder d-flex align-items-center justify-content-center mb-3">
-        <i class="fa-solid fa-camera fa-3x text-muted"></i>
-        <%# If you had an image field in your form, you'd put it here %>
-        <%# for example: f.input :image, as: :file, input_html: { class: 'd-none', id: 'surfboard_image_input' } %>
-        <%# and then style a label to look like a button %>
-      </div>
-      <button class="btn btn-secondary mt-3">Add Image</button>
-      <%# If you were actually uploading a file, this would be a label for an input type="file" %>
-      <%# <label for="surfboard_image_input" class="btn btn-secondary mt-3">Add Image</label> %>
+        <div class="form-progress-bar mb-4">
+          <div class="progress" role="progressbar" aria-label="Form Progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-bar" data-multi-step-form-target="progressBar" style="width: 0%"></div>
+          </div>
+          <small class="text-muted text-center d-block mt-2" data-multi-step-form-target="progressText">Step 1 of 3</small>
+        </div>
+
+        <div class="multi-step-form-step" data-multi-step-form-target="step">
+          <div class="row">
+            <div class="col-lg-10 offset-lg-1 p-4"> <%# Center and narrow this step for visual appeal %>
+              <h3 class="step-title">Step 1: Basic Surfboard Details</h3>
+              <%= f.input :category, collection: Surfboard::CATEGORIES, prompt: "Select a category", input_html: { class: 'rounded-input' } %>
+              <%= f.input :size, input_html: { class: 'rounded-input' } %>
+              <%= f.input :tail, collection: Surfboard::TAIL_TYPES, prompt: "Select a tail type", input_html: { class: 'rounded-input' } %>
+              <div class="d-flex justify-content-end mt-4">
+                <button type="button" class="btn btn-primary" data-action="multi-step-form#nextStep">Next Step <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="multi-step-form-step d-none" data-multi-step-form-target="step"> <%# Hidden by default %>
+          <div class="row">
+            <div class="col-lg-10 offset-lg-1 p-4">
+              <h3 class="step-title">Step 2: Location and Price</h3>
+              <%= f.input :location, input_html: { class: 'rounded-input' } %>
+              <%= f.input :price, input_html: { class: 'rounded-input' } %>
+              <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn btn-secondary" data-action="multi-step-form#prevStep"><i class="fas fa-arrow-left"></i> Previous</button>
+                <button type="button" class="btn btn-primary" data-action="multi-step-form#nextStep">Next Step <i class="fas fa-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="multi-step-form-step d-none" data-multi-step-form-target="step"> <%# Hidden by default %>
+          <div class="row">
+            <div class="col-md-6 p-4"> <%# Left column for text inputs %>
+              <h3 class="step-title">Step 3: Description & Photos</h3>
+              <%= f.input :condition, collection: Surfboard::CONDITIONS, prompt: "Select board condition", input_html: { class: 'rounded-input' } %>
+              <%= f.input :description, as: :text, input_html: { class: 'rounded-input', rows: 5 }, placeholder: "Describe your surfboard (e.g., information, brand, extras)" %>
+            </div>
+
+            <div class="col-lg-6 p-4 d-flex flex-column align-items-center justify-content-center"> <%# Right column for image upload %>
+              <div class="image-upload-wrapper">
+                <div class="image-placeholder d-flex flex-wrap align-items-center justify-content-center mb-3" id="imagePreview">
+                  <i class="fa-solid fa-camera fa-3x text-muted"></i>
+                  <div id="image-previews-container" class="d-flex flex-wrap justify-content-center gap-2">
+                    <%# Multiple image previews will be inserted here by JS %>
+                  </div>
+                </div>
+                <%= f.input :images, as: :file, label: false, input_html: {
+                  class: 'd-none',
+                  id: 'surfboard_image_input',
+                  multiple: true,
+                  onchange: 'previewFile()'
+                } %>
+                <%# Or data: { action: "change->image-preview#preview" } if using Stimulus %>
+
+                <label for="surfboard_image_input" class="btn btn-secondary mt-3">Add Images</label>
+                <small class="text-muted mt-2">Upload multiple photos (JPG, PNG, GIF). Max size: 5MB each.</small>
+              </div>
+            </div>
+          </div>
+          <div class="row"> <%# New row for buttons if the above is col-lg-6, otherwise put them in the col-lg-6 above %>
+            <div class="col-12 d-flex justify-content-between mt-4">
+                <button type="button" class="btn btn-secondary" data-action="multi-step-form#prevStep"><i class="fas fa-arrow-left"></i> Previous</button>
+                <%= f.submit "Create Listing", class: "btn btn-primary" %> <%# Final submit button %>
+            </div>
+          </div>
+        </div>
+
+      <% end %> <%# END simple_form_for %>
     </div>
   </div>
 </div>
+
+<%# IMPORTANT: Your existing image preview JavaScript is currently a global function. %>
+<%# For Stimulus integration, you'd move this logic into a Stimulus controller (e.g., an 'image-upload' controller) %>
+<%# and connect it via data-action. For now, keeping it as a global script for simplicity of this step. %>
+<script>
+  function previewFile() {
+    const previewsContainer = document.getElementById('image-previews-container');
+    const cameraIcon = document.querySelector('#imagePreview .fa-camera');
+    const fileInput = document.getElementById('surfboard_image_input');
+    const files = fileInput.files;
+
+    previewsContainer.innerHTML = '';
+
+    if (files.length > 0) {
+      if (cameraIcon) {
+        cameraIcon.classList.add('d-none');
+      }
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          const imgDiv = document.createElement('div');
+          imgDiv.classList.add('multi-image-thumbnail');
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.classList.add('img-fluid');
+          imgDiv.appendChild(img);
+          previewsContainer.appendChild(imgDiv);
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      if (cameraIcon) {
+        cameraIcon.classList.remove('d-none');
+      }
+    }
+  }
+</script>
