@@ -40,3 +40,6 @@
 *.swp
 .DS_Store
 .env*
+
+# Ignore database backups
+*.dump
